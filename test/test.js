@@ -75,7 +75,6 @@ describe('server', function() {
     });
   });
 });
-
 describe('archive helpers', function() {
   describe('#readListOfUrls', function () {
     it('should read urls from sites.txt', function (done) {
@@ -99,6 +98,7 @@ describe('archive helpers', function() {
 
       archive.isUrlInList('example1.com', function (exists) {
         expect(exists).to.be.true;
+        console.log('========================>>>checking for exists: ', urlArray);
         if (++counter === total) { done(); }
       });
 
