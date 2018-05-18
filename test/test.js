@@ -150,7 +150,7 @@ describe('archive helpers', function() {
       setTimeout(function () {
         expect(fs.readdirSync(archive.paths.archivedSites)).to.deep.equal(urlArray);
         done();
-      }, 500);
+      }, 1995);
     });
   });
 });

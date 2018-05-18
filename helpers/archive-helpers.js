@@ -46,6 +46,7 @@ exports.isUrlInList = function(url, callback) {
 
 exports.addUrlToList = function(url, callback) {
   fs.writeFile(exports.paths.list, url + '\n', (err) => {
+    // console.log(url,'<---------------------------------')
     if (err) {
       throw err;
     }
@@ -63,24 +64,20 @@ exports.isUrlArchived = function(url, callback) {
 };
 
 exports.downloadUrls = function(urls) {
+  var newThis = this;
+  console.log(urls)
   urls.forEach(function(entry) {
     var entryURL = exports.paths.archivedSites + '/' + entry;
-    fs.access(
-      entryURL,
-      fs.constants.F_OK, 
-      function(err) {
-        if (err) {
-          request('http://' + entry + '/', (err, siteHTML) => {
-            // console.log('------------------------------------------->http://' + entry + '/');
-            err ? console.log(err) : null;
-            console.log('------------------------------------------------>', siteHTML);
-            fs.mkdir(entryURL, (err) => {
-              err ? console.log(err) : null;
-              fs.writeFile(entryURL, siteHTML, (err) => err ? console.log(err) : null );
-            });
+    exports.isUrlArchived(entry, function(boolean) {
+      if (!boolean) {
+        request('http://' + entry + '/', (err, siteHTML) => {
+          err ? console.log(err) : null;
+          fs.appendFile(`./test/testdata/sites/${entry}`, siteHTML.body, (err) => {
+            err ? console.log(err) : null 
           });
-        }
+        });
       }
-    );
+    });
   });
 };
+
